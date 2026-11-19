@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Twiqsi — Graphic designer</title>
+    <meta name="description" content="I’m Twiqsi, a graphic designer. I make identities, logos and posters for digital culture." />
+    <meta name="theme-color" content="#0d0d0c" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d0d0c'/%3E%3Cpath d='M19 21l4 7h4l-4-7z' fill='%232b3bff'/%3E%3Cellipse cx='16' cy='14' rx='8' ry='10' fill='none' stroke='%23f2efe8' stroke-width='5'/%3E%3C/svg%3E" />
+    <script>
+      // Decides the intro mode and the preloader before first paint. Content never depends on this succeeding.
+      (function () {
+        var d = document.documentElement;
+        try {
+          var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var ss = null;
+          try { ss = window.sessionStorage; } catch (e) {}
+          var get = function (k) { try { return ss && ss.getItem(k); } catch (e) { return null; } };
+          var put = function (k, v) { try { ss && ss.setItem(k, v); } catch (e) {} };
+          var seen = get('twiqsi:intro-seen') === '1';
+          var url = location.pathname + location.search + location.hash;
+          var deepLink = /\/works?\//.test(url) || /[?&]s=/.test(url) || /^#(?!\/)[\w-]+/.test(location.hash);
+          var liquid = /[?&]wm=liquid/.test(url) || (get('twiqsi:wm') === 'liquid' && !/[?&]wm=hand/.test(url));
+          d.setAttribute('data-intro', reduced || deepLink ? 'done' : 'pending');
+          d.setAttribute('data-intro-mode', reduced ? 'static' : seen ? 'short' : 'full');
+          d.classList.add('js');
+          // Preloader: first load of the session only, never for the liquid wordmark.
+          if (!liquid && get('twiqsi:preloaded') !== '1') {
+            put('twiqsi:preloaded', '1');
+            d.setAttribute('data-preload', reduced ? 'static' : 'on');
+            // Failsafe: the app takes over long before this; if it never starts, the page still shows.
+            window.__twiqsiPreload = setTimeout(function () {
+              d.removeAttribute('data-preload');
+              var p = document.getElementById('preloader');
+              if (p) p.remove();
+            }, 4500);
+          }
+          // Failsafe: never leave the page hidden behind an unfinished intro.
+          setTimeout(function () { d.setAttribute('data-intro', 'done'); }, 9000);
+        } catch (e) {
+          d.setAttribute('data-intro', 'done');
+          d.removeAttribute('data-preload');
+        }
+      })();
+    </script>
+    <style>#preloader{display:none}html.js[data-preload] #preloader{z-index:1000;pointer-events:none;place-items:center;display:grid;position:fixed;inset:0}#preloader .pl-bg{background:#0d0d0c;position:absolute;inset:0}#preloader svg{width:clamp(64px,12vmin,136px);height:auto;position:relative;overflow:visible}#preloader path{fill:none;stroke:#f2efe8;stroke-linecap:round;animation:.2s cubic-bezier(.5,.05,.3,1) forwards pl-draw}html[data-preload=static] #preloader path{animation:none;stroke-dashoffset:0!important}@keyframes pl-draw{to{stroke-dashoffset:0}}</style>
+    <script type="module" crossorigin src="/assets/index-DmlHdEy1.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BYykLc3e.css">
+  </head>
+  <body>
+    <div id="preloader" aria-hidden="true"><div class="pl-bg"></div><svg viewBox="125.3 570.4 361.3 441.7" stroke-width="53.6" focusable="false"><path d="M330.5 599.2C307.9 727.2 314.1 860.3 262.8 983.2" style="stroke-dasharray:391.3 395.3;stroke-dashoffset:393.3;animation-delay:80ms;animation-duration:240ms"/><path d="M168.3 684.9C250.8 769.4 339.7 845.6 444.9 901" style="stroke-dasharray:352.5 356.5;stroke-dashoffset:354.5;animation-delay:390ms;animation-duration:170ms"/><path d="M154.1 825.8C247.9 766.7 351 730.3 457.8 703.1" style="stroke-dasharray:329 333.0;stroke-dashoffset:331.0;animation-delay:630ms;animation-duration:160ms"/></svg></div>
+    <div id="root"></div>
+    <noscript>
+      <div style="padding:24px;font-family:system-ui,sans-serif;background:#0d0d0c;color:#f2efe8;min-height:100vh">
+        <h1 style="font-size:20vw;margin:0;line-height:.9">TWIQSI</h1>
+        <p>I’m Twiqsi, a graphic designer. I make identities, logos and posters for digital culture.</p>
+        <p>This portfolio needs JavaScript to show the work.</p>
+      </div>
+    </noscript>
+  </body>
+</html>
